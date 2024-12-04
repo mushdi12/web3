@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <title>Web. №2 | 338790</title>
+    <h:outputStylesheet name="styles.css"/>
+</h:head>
+
+<h:body>
+    <canvas id="coordinatePlane" width="400" height="400" class="canvas-container"></canvas>
+
+    <h:form styleClass="form-container">
+        <!-- X координаты -->
+        <h:outputLabel value="X: " styleClass="label"/>
+        <h:panelGroup layout="block" styleClass="button-group">
+            <h:commandButton value="-3" actionListener="#{pointCheckBean.setX(-3)}" styleClass="button"/>
+            <h:commandButton value="-2" actionListener="#{pointCheckBean.setX(-2)}" styleClass="button"/>
+            <h:commandButton value="-1" actionListener="#{pointCheckBean.setX(-1)}" styleClass="button"/>
+            <h:commandButton value="0" actionListener="#{pointCheckBean.setX(0)}" styleClass="button"/>
+            <h:commandButton value="1" actionListener="#{pointCheckBean.setX(1)}" styleClass="button"/>
+            <h:commandButton value="2" actionListener="#{pointCheckBean.setX(2)}" styleClass="button"/>
+            <h:commandButton value="3" actionListener="#{pointCheckBean.setX(3)}" styleClass="button"/>
+            <h:commandButton value="4" actionListener="#{pointCheckBean.setX(4)}" styleClass="button"/>
+            <h:commandButton value="5" actionListener="#{pointCheckBean.setX(5)}" styleClass="button"/>
+        </h:panelGroup>
+        <br/>
+
+        <!-- Y координата -->
+        <h:outputLabel value="Y: " styleClass="label"/>
+        <h:inputText value="#{pointCheckBean.y}" id="yInput" required="true" requiredMessage="Введите Y"
+                     validatorMessage="Y должно быть от -5 до 5" styleClass="input-text">
+            <f:validateDoubleRange minimum="-5" maximum="5"/>
+        </h:inputText>
+        <br/>
+
+        <!-- Радиус -->
+        <h:outputLabel value="Радиус: " styleClass="label"/>
+        <h:selectOneMenu value="#{pointCheckBean.radius}" styleClass="radius-select">
+            <f:selectItem itemValue="1" itemLabel="1"/>
+            <f:selectItem itemValue="2" itemLabel="2"/>
+            <f:selectItem itemValue="3" itemLabel="3"/>
+            <f:selectItem itemValue="4" itemLabel="4"/>
+            <f:selectItem itemValue="5" itemLabel="5"/>
+        </h:selectOneMenu>
+        <br/>
+
+        <!-- Кнопка для проверки -->
+        <h:panelGroup styleClass="center-button">
+            <h:commandButton value="Проверить" action="#{pointCheckBean.checkPoint}" styleClass="submit-button"/>
+        </h:panelGroup>
+    </h:form>
+
+    <!-- Таблица с результатами -->
+    <h:dataTable value="#{pointCheckBean.results}" var="result" styleClass="styled-table">
+        <h:column>
+            <f:facet name="header">X</f:facet>
+            <h:outputText value="#{result.x}" styleClass="x-column"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">Y</f:facet>
+            #{result.y}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Радиус</f:facet>
+            #{result.radius}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Результат</f:facet>
+            <h:outputText value="#{result.inside ? 'Внутри' : 'Вне'}" styleClass="result-column"/>
+        </h:column>
+    </h:dataTable>
+
+    <!-- Ссылка на страницу -->
+    <h:link outcome="index" value="Вернуться на стартовую страницу" styleClass="back-button"/>
+
+    <script src="scripts.js"></script>
+
+</h:body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+<h:head>
+    <title>Стартовая страница</title>
+</h:head>
+<h:body>
+    <h1>ФИО: Иванов Иван Иванович</h1>
+    <h2>Группа: P3216</h2>
+    <h2>Вариант: 2</h2>
+
+    <!-- Интерактивные часы -->
+    <h:outputText value="#{pointCheckBean.currentTime}" />
+    <h:outputText value=" (обновляется каждые 10 секунд)" />
+    <h:outputScript>
+        setInterval(function() {
+            location.reload();
+        }, 10000);
+    </h:outputScript>
+
+    <!-- Ссылка на основную страницу -->
+    <h:link outcome="main" value="Перейти к проверке точки"/>
+</h:body>
+</html>
