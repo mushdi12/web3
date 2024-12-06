@@ -44,14 +44,7 @@ body {
     font-size: 16px;
 }
 
-/* Группа кнопок */
-.button-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    margin-bottom: 20px;
-}
+
 
 /* Стили для кнопок */
 .button {
@@ -170,43 +163,84 @@ body {
     color: white;
 }
 
-/*
-styled-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 16px;
-    color: #333;
-    text-align: center;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+/* Стили для контейнера кнопок */
+.radius-links {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 10px;
 }
 
-.styled-table th, .styled-table td {
-    padding: 12px 15px;
-}
-
-.styled-table thead tr {
+/* Стили для кнопок радиуса */
+.radius-link {
+    padding: 10px 20px;
     background-color: #007bff;
-    color: #ffffff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
     text-align: center;
+    font-size: 16px;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+/* Цвет кнопки при наведении */
+.radius-link:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* Цвет кнопки при нажатии */
+.radius-link:active {
+    transform: scale(0.98);
+}
+
+/* Убираем обводку при фокусе */
+.radius-link:focus {
+    outline: none;
+}
+
+/* Стиль для активной кнопки */
+.active-link {
+    background-color: #0056b3 !important;
+    transform: scale(1.05);
+    color: white;
+}
+
+/* Кнопки неактивные, но выбранные */
+.radius-link.selected {
+    background-color: #0056b3;
+    color: white;
+}
+/* Стилизация блока ошибок */
+.error-messages {
+    color: #FF0000; /* Красный цвет текста */
     font-weight: bold;
+    background-color: #F8D7DA; /* Светло-красный фон */
+    padding: 10px;
+    border: 1px solid #F5C6CB; /* Тонкая рамка */
+    border-radius: 5px; /* Закругленные углы */
+    margin-top: 10px;
+    margin-bottom: 20px;
+    margin-outside: 20px;
 }
 
-.styled-table tbody tr {
-    background-color: #f3f3f3;
-    border-bottom: 1px solid #dddddd;
+/* Стилизация отдельных сообщений об ошибках */
+.error-messages li {
+    margin-bottom: 5px;
 }
 
-.styled-table tbody tr:nth-of-type(even) {
-    background-color: #e9ecef;
+/* Стилизация полей с ошибками */
+.input-text.error {
+    border: 2px solid #FF0000;
+    background-color: #F8D7DA;
 }
 
-.styled-table tbody tr:hover {
-    background-color: #d6e3f3;
+/* Добавим стили для отображения ошибок рядом с полем */
+.error-message {
+    color: #FF0000;
+    font-size: 12px;
+    margin-top: 5px;
 }
 
-.styled-table tbody tr:last-of-type {
-    border-bottom: 2px solid #007bff;
-}
- */

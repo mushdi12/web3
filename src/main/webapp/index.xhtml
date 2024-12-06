@@ -3,22 +3,30 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html">
 <h:head>
     <title>Стартовая страница</title>
+    <h:outputStylesheet name="index_styles.css" />
 </h:head>
 <h:body>
-    <h1>ФИО: Иванов Иван Иванович</h1>
-    <h2>Группа: P3216</h2>
-    <h2>Вариант: 2</h2>
+    <div class="container">
+        <header class="header">
+            <h1>Брагин Роман Андреевич</h1>
+            <h2>Группа: P3216</h2>
+            <h2>Вариант: 9038</h2>
+        </header>
 
-    <!-- Интерактивные часы -->
-    <h:outputText value="#{pointCheckBean.currentTime}" />
-    <h:outputText value=" (обновляется каждые 10 секунд)" />
-    <h:outputScript>
-        setInterval(function() {
-            location.reload();
-        }, 10000);
-    </h:outputScript>
+        <div class="time-container">
+            <h3>Текущее время: <h:outputText value="#{pointCheckBean.currentTime}"/></h3>
+            <h:outputScript>
+                setInterval(function() {
+                    location.reload();
+                }, 10000);
+            </h:outputScript>
+        </div>
 
-    <!-- Ссылка на основную страницу -->
-    <h:link outcome="main" value="Перейти к проверке точки"/>
+        <iframe src="https://free.timeanddate.com/clock/i9nxwecd/n101/szw210/szh210/hoc000/hbw0/hfc09f/cf100/hnc07c/hwc000/facfff/fnu2/fdi76/mqcfff/mqs4/mql18/mqw4/mqd60/mhcfff/mhs4/mhl5/mhw4/mhd62/mmv0/hhcfff/hhs1/hhb10/hmcfff/hms1/hmb10/hscfff/hsw3" frameborder="0" width="210" height="210"></iframe>
+
+        <div class="button-container">
+            <h:link outcome="main" value="Перейти к проверке точки" styleClass="button back-button"/>
+        </div>
+    </div>
 </h:body>
 </html>
