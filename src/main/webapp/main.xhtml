@@ -7,21 +7,15 @@
 <h:head>
     <title>Плоскость</title>
     <h:outputStylesheet name="main_styles.css"/>
+    <h:outputScript library="javax.faces" name="jsf.js" target="head"/>
 </h:head>
 
 <h:body>
 
 
-
-
-
-    <!-- Форма для ввода данных -->
     <h:form styleClass="form-container" id="main-form">
 
-        <!-- Канвас для отображения координатной плоскости -->
-        <canvas id="coordinatePlane" width="400" height="400" class="canvas-container"></canvas>
-
-
+        <canvas id="coordinatePlane" width="400" height="400" class="canvas-container" onclick="handleCanvasClick(event) " ></canvas>
 
         <h:outputText id="x-output" value="X: " styleClass="label"/>
         <h:inputText id="x" value="#{pointCheckBean.x}" required="true" styleClass="input-text">
@@ -35,55 +29,56 @@
 
         <p></p>
 
-        <h:outputText value="Y: " styleClass="label"/>
-        <h:inputText id="y-output" value="#{pointCheckBean.y}" required="true" styleClass="input-text">
+        <h:outputText id="y-output" value="Y: " styleClass="label"/>
+        <h:inputText id="y" value="#{pointCheckBean.y}" required="true" styleClass="input-text">
             <f:convertNumber type="number"/>
             <f:validateDoubleRange minimum="-5.0" maximum="5.0"/>
         </h:inputText>
 
         <p></p>
 
-        <h:message for="y-output" styleClass="error-message"/>
+        <h:message for="y" styleClass="error-message"/>
 
         <p></p>
 
         <h:outputText value="R: " styleClass="label"/>
 
         <!-- Выбор радиуса -->
-        <h:panelGroup id="radius-links" styleClass="radius-links">
+        <h:panelGroup id="r" styleClass="radius-links">
             <h:commandLink value="1" action="#{pointCheckBean.setRadius(1)}" immediate="true" styleClass="radius-link">
-                <f:ajax execute="@this" render="selected-radius"/>
+                <f:ajax execute="@this" render="selected-radius coordinatePlane resultsTable" onevent="updateGraphWithoutPoint"/>
             </h:commandLink>
             <h:commandLink value="2" action="#{pointCheckBean.setRadius(2)}" immediate="true" styleClass="radius-link">
-                <f:ajax execute="@this" render="selected-radius"/>
+                <f:ajax execute="@this" render="selected-radius coordinatePlane resultsTable"/>
             </h:commandLink>
             <h:commandLink value="3" action="#{pointCheckBean.setRadius(3)}" immediate="true" styleClass="radius-link">
-                <f:ajax execute="@this" render="selected-radius"/>
+                <f:ajax execute="@this" render="selected-radius coordinatePlane resultsTable"/>
             </h:commandLink>
             <h:commandLink value="4" action="#{pointCheckBean.setRadius(4)}" immediate="true" styleClass="radius-link">
-                <f:ajax execute="@this" render="selected-radius"/>
+                <f:ajax execute="@this" render="selected-radius coordinatePlane resultsTable"/>
             </h:commandLink>
             <h:commandLink value="5" action="#{pointCheckBean.setRadius(5)}" immediate="true" styleClass="radius-link">
-                <f:ajax execute="@this" render="selected-radius"/>
+                <f:ajax execute="@this" render="selected-radius coordinatePlane resultsTable"/>
             </h:commandLink>
         </h:panelGroup>
 
-        <h:outputText id="xValue" value="#{pointCheckBean.x}" style="display:none"/>
-        <h:outputText id="yValue" value="#{pointCheckBean.y}" style="display:none"/>
-        <h:outputText id="radiusValue" value="#{pointCheckBean.radius}" style="display:none"/>
 
-        <!-- Кнопка для проверки -->
+        <h:inputHidden id="selected-radius" value="#{pointCheckBean.radius}" />
+
         <h:panelGroup styleClass="center-button">
+            <h:commandButton value="Отрисовать"  styleClass="submit-button">
+                <f:ajax execute="@form" render="coordinatePlane resultsTable" onevent="updateGraphWithoutPoint"/>
+            </h:commandButton>
             <h:commandButton value="Проверить" action="#{pointCheckBean.checkPoint}" styleClass="submit-button">
                 <f:ajax execute="@form" render="coordinatePlane resultsTable" onevent="updateGraph"/>
+            </h:commandButton>
+            <h:commandButton value="Очистить данные" action="#{pointCheckBean.clearResults}" styleClass="submit-button">
+                <f:ajax execute="@form" render="coordinatePlane resultsTable" />
             </h:commandButton>
         </h:panelGroup>
     </h:form>
 
     <h:messages styleClass="error-messages" globalOnly="true"/>
-
-
-
 
 
     <!-- Таблица с результатами -->
@@ -102,7 +97,7 @@
         </h:column>
         <h:column>
             <f:facet name="header">Результат</f:facet>
-            <h:outputText value="#{result.inside ? 'Внутри' : 'Вне'}" styleClass="result-column"/>
+            <h:outputText value="#{result.inside}" styleClass="result-column"/>
         </h:column>
     </h:dataTable>
 

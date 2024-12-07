@@ -2,10 +2,10 @@ const canvas = document.getElementById('coordinatePlane');
 const ctx = canvas.getContext('2d');
 const centerX = canvas.width / 2;
 const centerY = canvas.height / 2;
-const scale = 28;
+const scale = 34;
 
 window.onload = function() {
-    paint(5, 0, 0);  // Рисуем с полученными параметрами
+    drawAxes()  // Рисуем с полученными параметрами
 }
 
 function drawAxes() {
@@ -55,7 +55,7 @@ function drawTriangle(R) {
     ctx.beginPath();
     ctx.moveTo(centerX, centerY);
     ctx.lineTo(centerX, centerY - R / 2 * scale);
-    ctx.lineTo(centerX + R / 2 * scale, centerY);
+    ctx.lineTo(centerX + R  * scale, centerY);
     ctx.lineTo(centerX, centerY);
     ctx.fill();
     ctx.closePath();
@@ -91,25 +91,59 @@ function paint(r, x, y) {
     drawPoint(x, y);  // Рисуем точку по переданным данным
 }
 
+function paintWithoutPoint(r) {
+    //console.log(canvas); // Проверьте, что canvas существует
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Очистить канвас
+    drawSquare(r);
+    drawCircle(r);
+    drawTriangle(r);
+    drawAxes();
+
+}
+
 function updateGraph(event) {
-    // Проверяем статус события
     if (event.status === 'begin') {
         console.log("AJAX запрос начат");
-        // Здесь можно, например, отобразить индикатор загрузки
     } else if (event.status === 'complete') {
         console.log("AJAX запрос завершён");
-        // Ответ доступен в event.responseText, его нужно обработать
 
-        // Для отладки выведем весь ответ
-        console.log("Ответ от сервера:", event.responseText);
-
-        // Теперь можно извлечь данные из ответа
         try {
-            var x = document.getElementById("xValue") ? parseFloat(document.getElementById("xValue").innerText) : 0;
-            var y = document.getElementById("yValue") ? parseFloat(document.getElementById("yValue").innerText) : 0;
-            var r = document.getElementById("radiusValue") ? parseFloat(document.getElementById("radiusValue").innerText) : 0;
+            // Получаем элементы через JSF с учётом правильных ID
+            var xElement = document.getElementById("main-form:x");
+            var yElement = document.getElementById("main-form:y");
+            var rElement = document.getElementById("main-form:selected-radius");
+
+            // Проверяем, что элементы найдены
+            if (!xElement || !yElement || !rElement) {
+                console.error("Ошибка: не все элементы найдены.");
+                return;
+            }
+
+            var x = xElement.value;
+            var y = yElement.value;
+            var r = rElement.value;
+
+            // Проверяем, что все данные получены
+            if (x === "" || y === "" || r === "") {
+                console.error("Ошибка: не все значения были получены.");
+                return;
+            }
+
+            // Печатаем их для отладки
             console.log('X:', x, 'Y:', y, 'R:', r);  // Отладка
-            paint(r, x, y);  // Вызов функции paint для отрисовки графика
+
+            // Конвертируем X, Y, R в числовые значения
+            x = parseFloat(x);
+            y = parseFloat(y);
+            r = parseFloat(r);
+
+            if (isNaN(x) || isNaN(y) || isNaN(r)) {
+                console.error("Ошибка: одно из значений не является числом.");
+                return;
+            }
+
+            paint(r, x, y);
+
         } catch (error) {
             console.error("Ошибка при обработке данных:", error);
         }
@@ -118,12 +152,51 @@ function updateGraph(event) {
     }
 }
 
+function updateGraphWithoutPoint(event) {
+    if (event.status === 'begin') {
+        console.log("AJAX запрос начат");
+    } else if (event.status === 'complete') {
+        console.log("AJAX запрос завершён");
+
+        try {
+
+            var rElement = document.getElementById("main-form:selected-radius");
+
+            // Проверяем, что элементы найдены
+            if (!rElement) {
+                console.error("Ошибка: r найдены.");
+                return
+            }
+
+            var r = rElement.value;
+
+            // Проверяем, что все данные получены
+            if (r === "") {
+                console.error("Ошибка: r были получены.");
+                return
+            }
+
+            // Печатаем их для отладки
+            console.log('R:', r);  // Отладка
 
 
+            r = parseFloat(r);
 
+            if ( isNaN(r)) {
+                console.error("Ошибка: r не является числом.");
+                return
+            }
 
+            // Отрисовываем график
+            paintWithoutPoint(r);
 
-
+        } catch (error) {
+            console.error("Ошибка при обработке данных:", error);
+        }
+    } else {
+        console.error("Ошибка в обработке AJAX запроса: Статус -", event.status);
+    }
+}
 
 // Функция для обработки изменения состояния кнопок
 function toggleButtonSelection(event) {
@@ -138,3 +211,41 @@ function toggleButtonSelection(event) {
 document.querySelectorAll('.radius-link').forEach(function(button) {
     button.addEventListener('click', toggleButtonSelection);
 });
+
+function handleCanvasClick(event) {
+    var canvas = document.getElementById('coordinatePlane');
+    var rect = canvas.getBoundingClientRect();
+    var x = (event.clientX - rect.left - centerX) / scale;
+    var y = (centerY - (event.clientY - rect.top)) / scale;
+
+    // Ограничиваем точность до 2 знаков после запятой (для передачи как double)
+    x = parseFloat(x.toFixed(2));
+    y = parseFloat(y.toFixed(2));
+    drawPoint(x, y);
+
+    // Устанавливаем значения в скрытые поля формы для отправки
+    document.getElementById('main-form:x').value = x;
+    document.getElementById('main-form:y').value = y;
+
+    // Параметры запроса через JSF
+    var form = document.getElementById('main-form');
+    jsf.ajax.request(form, {
+        execute: '@form',  // Отправляем всю форму
+        render: 'coordinatePlane resultsTable', // Перерисовываем элементы
+        onevent: function(event) {
+            if (event.status === 'complete') {
+                console.log('Координаты X: ' + x + ', Y: ' + y + ' отправлены в Bean.');
+            }
+        },
+        params: [
+            {name: 'main-form:x', value: x},
+            {name: 'main-form:y', value: y},
+            {name: 'main-form:selected-radius', value: 1}, // Передаем радиус
+            {name: 'main-form:checkPointAction', value: 'checkPoint'} // Специальный параметр для вызова метода checkPoint
+        ]
+    });
+}
+
+
+
+

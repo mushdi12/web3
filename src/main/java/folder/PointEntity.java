@@ -14,9 +14,9 @@ import java.util.List;
 @Getter
 @ToString
 @NoArgsConstructor
-@Entity("lab3") // Название коллекции в MongoDB
+@Entity("lab3")
 public class PointEntity {
-    // Геттеры и сеттеры
+
     @Id
     private String id;  // _id в MongoDB
     private double x;      // x

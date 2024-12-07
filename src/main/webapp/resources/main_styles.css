@@ -243,4 +243,38 @@ body {
     font-size: 12px;
     margin-top: 5px;
 }
+.center-button {
+    display: flex; /* Выравнивание элементов по горизонтали */
+    justify-content: center; /* Центрирование кнопок */
+    gap: 20px; /* Пробел между кнопками */
+    margin-top: 20px; /* Отступ сверху */
+}
+
+.submit-button {
+    font-size: 16px; /* Размер шрифта */
+    border-radius: 5px; /* Округлые углы */
+    cursor: pointer; /* Курсор при наведении */
+    transition: background-color 0.3s; /* Плавный переход фона */
+}
+
+.submit-button:hover {
+    background-color: #007bff; /* Цвет фона при наведении */
+}
+
+.draw-button {
+    background-color: #71b5ff; /* Цвет фона для кнопки "Отрисовать" */
+    color: white; /* Белый текст */
+}
+
+.check-button {
+    background-color: #71b5ff; /* Цвет фона для кнопки "Проверить" */
+    color: white; /* Белый текст */
+}
+
+/* При необходимости, добавьте стили для фокуса */
+.submit-button:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
 

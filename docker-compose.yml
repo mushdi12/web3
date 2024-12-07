@@ -1,0 +1,35 @@
+version: '3.7'
+
+services:
+  wildfly:
+    build:
+      context: .  # Dockerfile из текущей директории
+    container_name: wildfly
+    ports:
+      - "8080:8080"  # Порт для HTTP WildFly
+      - "9990:9990"  # Порт для консоли управления WildFly
+    environment:
+      - JAVA_OPTS=-Djava.net.preferIPv4Stack=true  # Настройка для корректной работы IPv4
+    networks:
+      - app-network
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"  # Порт для подключения к MongoDB
+    volumes:
+      - mongo-data:/data/db  # Хранилище данных
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=   # Не задаем имя пользователя (пароль не будет требоваться)
+      - MONGO_INITDB_ROOT_PASSWORD=   # Не задаем пароль
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge  # Общая сеть для взаимодействия контейнеров
+
+volumes:
+  mongo-data:
+    driver: local  # Локальное хранилище для данных MongoDB

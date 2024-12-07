@@ -4,26 +4,22 @@ import dev.morphia.Datastore;
 import dev.morphia.Morphia;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
-
-import java.util.List;
+import org.bson.Document;
 
 public class MongoDBService {
-    private Datastore datastore;
 
-    /*
-    public MongoDBService() {
-        MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017"); // URL подключения
-        Datastore datastore = Morphia.createDatastore(mongoClient, "java"); // укажите имя своей базы данных
-        datastore.ensureIndexes(); // Обеспечиваем наличие индексов
+    private final MongoClient mongoClient = MongoClients.create("mongodb://mongodb:27017");
+
+    private final Datastore datastore = Morphia.createDatastore(mongoClient, "java");
+
+    void saveToDB(double x, double y, double r, String verdict) {
+        PointEntity point = new PointEntity(x, y, r, verdict);
+        datastore.save(point);
     }
 
-    public void savePointCheckResult(PointCheckResult result) {
-        datastore.save(result);  // Сохранение объекта в MongoDB
+    void clearDB() {
+        datastore.getCollection(PointEntity.class).deleteMany(new Document());
     }
 
-    public List<PointCheckResult> getAllResults() {
-        return datastore.find(PointCheckResult.class).iterator().toList(); // Извлечение всех результатов
-    }
 
-     */
 }
